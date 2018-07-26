@@ -13,9 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
 
+from django.conf import settings
+from django.conf.urls import include, url
+from django.contrib import admin
+from manager import views
+
+import manager.views as manager_view
+
+app_name = 'Scelts Member'
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
+    url(r'^login/', manager_view.CustomLoginView.as_view()),
+    #url(r'^logout/', manager_view.logout_view),
+    url(r'^member_list/', manager_view.PersonListView.as_view()),
+    #url(r'^hijack/', include('hijack.urls')),
+    # URLとViewを組み合わせる！
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
